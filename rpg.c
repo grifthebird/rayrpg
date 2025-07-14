@@ -373,9 +373,12 @@ void generate_map(info * rpg_info) { // test map generation function
         
         // path generation code
         // start and end
-        rpg_info->map_start = GetRandomValue(0, 400);
+        rpg_info->map_start = GetRandomValue(0, 399);
         rpg_info->map[rpg_info->map_start] = 2;
-        rpg_info->map_end = GetRandomValue(0, 400);
+        rpg_info->map_end = GetRandomValue(0, 399);
+        while (rpg_info->map_end == rpg_info->map_start) {
+            rpg_info->map_end = GetRandomValue(0, 399);
+        }
         rpg_info->map[rpg_info->map_end] = 3;
         current_tile = rpg_info->map_start;
         rpg_info->generated = 1;
