@@ -269,21 +269,34 @@ void draw_player(info * rpg_info) { // draw player on map
 void hook(info * rpg_info, int start) {
     int length = GetRandomValue(2, 20);
     int direction = GetRandomValue(0, 3);
+    rpg_info->map[start] = 1;
     for (int i = 0; i < length / 2; i++) {
         switch (direction) {
             case (0): { // right
+                if (rpg_info->map[start + i] == 2 || rpg_info->map[start + i] == 3) {
+                    break;
+                }
                 rpg_info->map[start + i] = 1;
                 break;
             }
             case (1): { // down
+                if (rpg_info->map[start + (20 * i)] == 2 || rpg_info->map[start + (20 * i)] == 3) {
+                    break;
+                }
                 rpg_info->map[start + (20 * i)] = 1;
                 break;
             }
             case (2): { // left
+                if (rpg_info->map[start - i] == 2 || rpg_info->map[start - i] == 3) {
+                    break;
+                }
                 rpg_info->map[start - i] = 1;
                 break;
             }
             case (3): { // up
+                if (rpg_info->map[start - (20 * i)] == 2 || rpg_info->map[start - (20 * i)] == 3) {
+                    break;
+                }
                 rpg_info->map[start - (20 * i)] = 1;
                 break;
             }
@@ -293,18 +306,30 @@ void hook(info * rpg_info, int start) {
     for (int i = 0; i < length / 2; i++) {
         switch (direction) {
             case (0): { // down
+                if (rpg_info->map[start + (20 * i)] == 2 || rpg_info->map[start + (20 * i)] == 3) {
+                    break;
+                }
                 rpg_info->map[start + (20 * i)] = 1;
                 break;
             }
             case (1): { // left
+                if (rpg_info->map[start - i] == 2 || rpg_info->map[start - i] == 3) {
+                    break;
+                }
                 rpg_info->map[start + i] = 1;
                 break;
             }
             case (2): { // up
+                if (rpg_info->map[start - (20 * i)] == 2 || rpg_info->map[start - (20 * i)] == 3) {
+                    break;
+                }
                 rpg_info->map[start - (20 * i)] = 1;
                 break;
             }
             case (3): { // right
+                if (rpg_info->map[start + i] == 2 || rpg_info->map[start + i] == 3) {
+                    break;
+                }
                 rpg_info->map[start - i] = 1;
                 break;
             }
@@ -315,6 +340,7 @@ void hook(info * rpg_info, int start) {
 void fork(info * rpg_info, int start) {
     int direction = GetRandomValue(0, 1);
     int branch = GetRandomValue(0, 1);
+    rpg_info->map[start] = 1;
     if (direction) { // horizontal
         rpg_info->map[start + 1] = 1;
         rpg_info->map[start - 1] = 1;
@@ -358,6 +384,9 @@ void generate_map(info * rpg_info) { // test map generation function
         while ((current_tile % 20) != (rpg_info->map_end % 20)) { // draw horizontal
             if ((current_tile % 20) >= (rpg_info->map_end % 20)) {
                 current_tile -= 1;
+                if (rpg_info->map[current_tile] == 3) {
+                    break;
+                }
                 if (GetRandomValue(0, 10) > 8) {
                     rpg_info->map[current_tile] = 4;
                 }
@@ -372,6 +401,9 @@ void generate_map(info * rpg_info) { // test map generation function
             }
             else if ((current_tile % 20) <= (rpg_info->map_end % 20)) {
                 current_tile += 1;
+                if (rpg_info->map[current_tile] == 3) {
+                    break;
+                }
                 if (GetRandomValue(0, 10) > 8) {
                     rpg_info->map[current_tile] = 4;
                 }
@@ -388,6 +420,9 @@ void generate_map(info * rpg_info) { // test map generation function
         
         while ((current_tile / 20) != (rpg_info->map_end / 20)) { // draw vertical
             if ((current_tile / 20) >= (rpg_info->map_end / 20)) {
+                if (rpg_info->map[current_tile] == 2) {
+                    current_tile -= 20;
+                }
                 if (GetRandomValue(0, 10) > 8) {
                     rpg_info->map[current_tile] = 4;
                 }
@@ -397,6 +432,9 @@ void generate_map(info * rpg_info) { // test map generation function
                 current_tile -= 20;
             }
             else if ((current_tile / 20) <= (rpg_info->map_end / 20)) {
+                if (rpg_info->map[current_tile] == 2) {
+                    current_tile += 20;
+                }
                 if (GetRandomValue(0, 10) > 8) {
                     rpg_info->map[current_tile] = 4;
                 }
